@@ -91,6 +91,7 @@ const data = [
         <th>Имя</th>
         <th>Фамилия</th>
         <th>Телефон</th>
+        <th></th>
       </tr>
     `);
 
@@ -199,6 +200,9 @@ const data = [
     return {
       list: table.tbody,
       logo,
+      btnAdd: buttonGroup.btns[0],
+      formOverlay: form.overlay,
+      form: form.form,
     };
   };
 
@@ -224,7 +228,14 @@ const data = [
     tr.phoneLink = phoneLink;
     tdPhone.append(phoneLink);
 
-    tr.append(tdDel, tdName, tdSurname, tdPhone);
+    const tdEdit = document.createElement('td');
+    const btnEdit = document.createElement('button');
+    btnEdit.type = 'button';
+    btnEdit.classList.add('btn', 'btn-outline-success', 'btn-sm');
+    btnEdit.textContent = 'Редактировать';
+    tdEdit.append(btnEdit);
+
+    tr.append(tdDel, tdName, tdSurname, tdPhone, tdEdit);
 
     return tr;
   };
@@ -251,13 +262,30 @@ const data = [
     const app = document.querySelector(selectorApp);
     const phoneBook = renderPhoneBook(app, title);
 
-    const {list, logo} = phoneBook;
+    const {list, logo, btnAdd, formOverlay, form} = phoneBook;
 
     // Функционал
 
     const allRow = renderContacts(list, data);
+    const btnCloseForm = form.querySelector('.close');
 
     hoverRow(allRow, logo);
+
+    btnAdd.addEventListener('click', () => {
+      formOverlay.classList.add('is-visible');
+    });
+
+    form.addEventListener('click', event => {
+      event.stopPropagation();
+    });
+
+    formOverlay.addEventListener('click', () => {
+      formOverlay.classList.remove('is-visible');
+    });
+
+    btnCloseForm.addEventListener('click', () => {
+      formOverlay.classList.remove('is-visible');
+    });
   };
 
   window.phoneBookInit = init;
