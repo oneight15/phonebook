@@ -204,6 +204,7 @@ const data = [
       btnDel: buttonGroup.btns[1],
       formOverlay: form.overlay,
       form: form.form,
+      table,
     };
   };
 
@@ -218,6 +219,7 @@ const data = [
     buttonDel.classList.add('del-icon');
 
     const tdName = document.createElement('td');
+    tdName.classList.add('name');
     tdName.textContent = firstName;
 
     const tdSurname = document.createElement('td');
@@ -271,6 +273,7 @@ const data = [
       btnDel,
       formOverlay,
       form,
+      table,
     } = phoneBook;
 
     // Функционал
@@ -301,6 +304,38 @@ const data = [
       if (target.closest('.del-icon')) {
         target.closest('.contact').remove();
       }
+    });
+
+    // сортировка по алфавиту
+    const thead = document.querySelector('thead');
+    thead.addEventListener('click', e => {
+      let i;
+
+      switch (e.target.textContent) {
+        case 'Имя':
+          i = 1;
+          break;
+
+        case 'Фамилия':
+          i = 2;
+          break;
+
+        default:
+          return;
+      }
+
+      const tableArr = [...table.rows].slice(1).sort((rowA, rowB) => {
+        switch (true) {
+          case rowA.cells[i].innerHTML > rowB.cells[i].innerHTML:
+            return 1;
+          case rowA.cells[i].innerHTML < rowB.cells[i].innerHTML:
+            return -1;
+          default:
+            return 0;
+        }
+      });
+
+      list.append(...tableArr);
     });
   };
 
