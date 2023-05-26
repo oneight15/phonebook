@@ -308,7 +308,10 @@ const data = [
 
     // сортировка по алфавиту
     const thead = document.querySelector('thead');
+    let direction = 'increase';
     thead.addEventListener('click', e => {
+      const mult = direction === 'increase' ? 1 : -1;
+      direction = direction === 'increase' ? 'descending' : 'increase';
       let i;
 
       switch (e.target.textContent) {
@@ -327,9 +330,9 @@ const data = [
       const tableArr = [...table.rows].slice(1).sort((rowA, rowB) => {
         switch (true) {
           case rowA.cells[i].innerHTML > rowB.cells[i].innerHTML:
-            return 1;
+            return 1 * mult;
           case rowA.cells[i].innerHTML < rowB.cells[i].innerHTML:
-            return -1;
+            return -1 * mult;
           default:
             return 0;
         }
