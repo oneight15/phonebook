@@ -88,8 +88,8 @@ const data = [
     thead.insertAdjacentHTML('beforeend', `
       <tr>
         <th class="delete">Удалить</th>
-        <th>Имя</th>
-        <th>Фамилия</th>
+        <th class="th-sort">Имя</th>
+        <th class="th-sort">Фамилия</th>
         <th>Телефон</th>
         <th></th>
       </tr>
@@ -308,38 +308,69 @@ const data = [
 
     // сортировка по алфавиту
     const thead = document.querySelector('thead');
-    let direction = 'increase';
-    thead.addEventListener('click', e => {
-      const mult = direction === 'increase' ? 1 : -1;
-      direction = direction === 'increase' ? 'descending' : 'increase';
-      let i;
+    const allTh = document.querySelectorAll('.th-sort');
+    let clickTarget;
+    let direction;
 
-      switch (e.target.textContent) {
-        case 'Имя':
-          i = 1;
-          break;
-
-        case 'Фамилия':
-          i = 2;
-          break;
-
-        default:
-          return;
-      }
-
-      const tableArr = [...table.rows].slice(1).sort((rowA, rowB) => {
-        switch (true) {
-          case rowA.cells[i].innerHTML > rowB.cells[i].innerHTML:
-            return 1 * mult;
-          case rowA.cells[i].innerHTML < rowB.cells[i].innerHTML:
-            return -1 * mult;
-          default:
-            return 0;
+    const sortTh = e => {
+      if (e.target.matches('.th-sort')) {
+        if (e.target.textContent !== clickTarget) {
+          direction = 'increase';
+          allTh.forEach(item => item.classList.remove('th-sort-up', 'th-sort-down'));
         }
-      });
 
-      list.append(...tableArr);
-    });
+        clickTarget = e.target.textContent;
+
+        const mult = direction === 'increase' ? 1 : -1;
+        direction = direction === 'increase' ? 'descending' : 'increase';
+
+        switch (direction) {
+          case 'increase':
+            e.target.classList.toggle('th-sort-up');
+            e.target.classList.toggle('th-sort-down');
+            break;
+
+          case 'descending':
+            e.target.classList.remove('th-sort-up');
+            e.target.classList.add('th-sort-down');
+            break;
+
+          default:
+            e.target.classList.add('th-sort-up');
+            break;
+        }
+
+        let i;
+
+        switch (e.target.textContent) {
+          case 'Имя':
+            i = 1;
+            break;
+
+          case 'Фамилия':
+            i = 2;
+            break;
+
+          default:
+            return;
+        }
+
+        const tableArr = [...table.rows].slice(1).sort((rowA, rowB) => {
+          switch (true) {
+            case rowA.cells[i].innerHTML > rowB.cells[i].innerHTML:
+              return 1 * mult;
+            case rowA.cells[i].innerHTML < rowB.cells[i].innerHTML:
+              return -1 * mult;
+            default:
+              return 0;
+          }
+        });
+
+        list.append(...tableArr);
+      }
+    };
+
+    thead.addEventListener('click', sortTh);
   };
 
   window.phoneBookInit = init;

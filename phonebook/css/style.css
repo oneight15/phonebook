@@ -130,3 +130,11 @@ body {
   color: #fff;
   text-align: center;
 }
+
+.th-sort-up::after {
+  content: '▲';
+}
+
+.th-sort-down::after {
+  content: '▼'
+}
