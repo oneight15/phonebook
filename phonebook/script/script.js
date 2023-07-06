@@ -1,32 +1,46 @@
 'use strict';
 
-const data = [
-  {
-    name: 'Иван',
-    surname: 'Петров',
-    phone: '+79514545454',
-  },
-  {
-    name: 'Игорь',
-    surname: 'Семёнов',
-    phone: '+79999999999',
-  },
-  {
-    name: 'Семён',
-    surname: 'Иванов',
-    phone: '+79800252525',
-  },
-  {
-    name: 'Мария',
-    surname: 'Попова',
-    phone: '+79876543210',
-  },
-];
+// const data = [
+//   {
+//     name: 'Иван',
+//     surname: 'Петров',
+//     phone: '+79514545454',
+//   },
+//   {
+//     name: 'Игорь',
+//     surname: 'Семёнов',
+//     phone: '+79999999999',
+//   },
+//   {
+//     name: 'Семён',
+//     surname: 'Иванов',
+//     phone: '+79800252525',
+//   },
+//   {
+//     name: 'Мария',
+//     surname: 'Попова',
+//     phone: '+79876543210',
+//   },
+// ];
 
 {
+  const getStorage = (key) => (localStorage.getItem(key) ?
+    JSON.parse(localStorage.getItem(key)) : []);
+
+  const setStorage = (key, data) => {
+    localStorage.setItem(key, JSON.stringify(data));
+  };
+
   const addContactData = contact => {
+    const data = getStorage('phonebook');
     data.push(contact);
-    console.log('data', data);
+    setStorage('phonebook', data);
+  };
+
+  const removeStorage = phone => {
+    const data = getStorage('phonebook');
+    const newData = data.filter(item => item.phone !== phone);
+    setStorage('phonebook', newData);
   };
 
   const createContainer = () => {
@@ -231,6 +245,7 @@ const data = [
     tdSurname.textContent = surname;
 
     const tdPhone = document.createElement('td');
+    tdPhone.classList.add('phone');
     const phoneLink = document.createElement('a');
     phoneLink.href = `tel:${phone}`;
     phoneLink.textContent = phone;
@@ -302,7 +317,10 @@ const data = [
     list.addEventListener('click', e => {
       const target = e.target;
       if (target.closest('.del-icon')) {
-        target.closest('.contact').remove();
+        const targetRow = target.closest('.contact');
+        targetRow.remove();
+        const targetTd = targetRow.querySelector('.phone');
+        removeStorage(targetTd.textContent);
       }
     });
   };
@@ -341,6 +359,7 @@ const data = [
 
     // Функционал
 
+    const data = getStorage('phonebook');
     const allRow = renderContacts(list, data);
     const {closeModal} = modalControl(btnAdd, formOverlay);
 
