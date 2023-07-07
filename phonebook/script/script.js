@@ -24,8 +24,7 @@
 // ];
 
 {
-  const getStorage = (key) => (localStorage.getItem(key) ?
-    JSON.parse(localStorage.getItem(key)) : []);
+  const getStorage = (key) => JSON.parse(localStorage.getItem(key)) || [];
 
   const setStorage = (key, data) => {
     localStorage.setItem(key, JSON.stringify(data));
@@ -377,7 +376,8 @@
       if (e.target.matches('.th-sort')) {
         if (e.target.textContent !== clickTarget) {
           direction = 'increase';
-          allTh.forEach(item => item.classList.remove('th-sort-up', 'th-sort-down'));
+          allTh.forEach(item =>
+            item.classList.remove('th-sort-up', 'th-sort-down'));
         }
 
         clickTarget = e.target.textContent;
