@@ -1,4 +1,4 @@
-import * as storage from './serviceStorage.js';
+import {addContactData, removeStorage} from './serviceStorage.js';
 import * as create from './createElements.js';
 
 export const modalControl = (btnAdd, formOverlay) => {
@@ -39,7 +39,7 @@ export const deleteControl = (btnDel, list) => {
       const targetRow = target.closest('.contact');
       targetRow.remove();
       const targetTd = targetRow.querySelector('.phone');
-      storage.removeStorage(targetTd.textContent);
+      removeStorage(targetTd.textContent);
     }
   });
 };
@@ -56,7 +56,7 @@ export const formControl = (form, list, closeModal) => {
     const newContact = Object.fromEntries(formData);
 
     addContactPage(newContact, list);
-    storage.addContactData(newContact);
+    addContactData(newContact);
 
     form.reset();
     closeModal();

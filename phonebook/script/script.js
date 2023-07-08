@@ -1,5 +1,5 @@
 import * as render from './modules/render.js';
-import * as storage from './modules/serviceStorage.js';
+import {getStorage} from './modules/serviceStorage.js';
 import hoverRow from './modules/hoverRow.js';
 import * as control from './modules/controls.js';
 
@@ -19,7 +19,7 @@ import * as control from './modules/controls.js';
 
     // Функционал
 
-    const data = storage.getStorage('phonebook');
+    const data = getStorage('phonebook');
     const allRow = render.renderContacts(list, data);
     const {closeModal} = control.modalControl(btnAdd, formOverlay);
 
